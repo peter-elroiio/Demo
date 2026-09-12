@@ -16,7 +16,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
       with:
-          source-url: https://nuget.pkg.github.com/coldcart/index.json
+          source-url: https://nuget.pkg.github.com/peter-elroiio/index.json
       env:
           NUGET_AUTH_TOKEN: ${{secrets.NUGET_API_KEY}}
 
