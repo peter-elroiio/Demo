@@ -1,0 +1,29 @@
+name: Publish NuGet Package
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+          source-url: https://nuget.pkg.github.com/coldcart/index.json
+      env:
+          NUGET_AUTH_TOKEN: ${{secrets.NUGET_API_KEY}}
+
+    - name: Pack
+      run: |
+        cd src/Tusk/
+        dotnet pack -c Release --property:PackageOutputPath=out
+    
+    - name: Push to NuGet
+      run: dotnet nuget push src/Tusk/out/*.nupkg --source "https://nuget.pkg.github.com/coldcart/index.json" --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate --no-symbols
